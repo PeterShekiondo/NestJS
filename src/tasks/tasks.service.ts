@@ -43,7 +43,7 @@ export class TasksService {
     }
 
     async getTaskByID(id:number): Promise<Task> {
-        const found = await this.taskRepository.findOne(id)
+        const found = await this.taskRepository.findOne(id)     // Repository type ORM method for finding from row using ID
 
         if(!found){
             throw new NotFoundException('oops..! There is no Task with such ID')
@@ -52,14 +52,20 @@ export class TasksService {
         return found
     }
 
-    // deleteTaskByID(id:string):void {
-    //     let found = this.getTaskByID(id)
-    //     this.tasks = this.tasks.filter(task=> task.id != found.id)
-    // }
+    async deleteTaskByID(id:number):Promise<string> {
+        let task = await this.taskRepository.delete(id)   // Repository type ORM method for delete from the table
+        if (task.affected === 0) {
+            throw new NotFoundException('Task with ID ' +id+ ' not found ')
+        }else{
+            const response = 'task with ID ' +id+ ' has been deleted successively'
+            return response
+        }
+    }
 
-    // updateTaskStatus(id:string, status:TaskStatus):Task {
-    //     const task = this.getTaskByID(id)
-    //      task.status = status
-    //      return task
-    // }
+    async updateTaskStatus(id:number, status:TaskStatus):Promise<Task> {
+        const task = await this.getTaskByID(id)      // all database operation must be async operation
+         task.status = status
+         await task.save()           // all database operation must be async operation
+         return task
+    }
 }
