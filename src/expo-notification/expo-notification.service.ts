@@ -7,11 +7,16 @@ export class ExpoNotificationService {
     const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
     console.log(expo);
     const messages = [];
-    const pushToken = 'ExponentPushToken[TYLVCyL5sT0jwMsomv0flr]';
+    const pushToken = [
+      'ExponentPushToken[R7c-XDKwOqI3QDyOFzg7To]',
+      'ExponentPushToken[TYLVCyL5sT0jwMsomv0flr]',
+    ];
     messages.push({
       to: pushToken,
       sound: 'default',
-      body: 'This is a test notification',
+      title: 'Tender progress',
+      body: 'This is a test notification for tender progress',
+      badge: 0,
       data: { withSome: 'data' },
     });
 
