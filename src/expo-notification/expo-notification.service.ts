@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Expo } from 'expo-server-sdk';
+import { CreateNotificationDto, SendNotificationDto } from './dto';
 
 @Injectable()
 export class ExpoNotificationService {
-  async testExpoNotification(): Promise<void> {
+  async sendExpoNotification(
+    sendNotificationDto: SendNotificationDto,
+  ): Promise<any> {
+    const { id, title, message } = sendNotificationDto;
+    console.log(id);
+    console.log(title);
+    console.log(message);
+
     const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
-    console.log(expo);
     const messages = [];
     const pushToken = [
       'ExponentPushToken[R7c-XDKwOqI3QDyOFzg7To]',
@@ -14,21 +21,19 @@ export class ExpoNotificationService {
     messages.push({
       to: pushToken,
       sound: 'default',
-      title: 'Tender progress',
-      body: 'This is a test notification for tender progress',
+      title: title,
+      body: message,
       badge: 0,
       data: { withSome: 'data' },
     });
 
-    (async () => {
-      try {
-        const chunks = await expo.sendPushNotificationsAsync(messages);
-        console.log(chunks);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-
-    return null;
+    try {
+      const chunks = await expo.sendPushNotificationsAsync(messages);
+      console.log(chunks);
+      return chunks;
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
   }
 }
