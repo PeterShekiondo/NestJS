@@ -11,11 +11,10 @@ export class TaskRepositoty extends Repository<Task> {
     const query = this.createQueryBuilder('task'); // Query builder with a 'task' key
 
     if (status) {
-      query.andWhere('task.status = :status', { status }); // variable   // value of the variable
+      query.andWhere('task.status = :status', { status });
     }
 
     if (search) {
-      // If condition with an || operator between two parameters   // value of variable with percentage of likeness (the word should be partially or complete similar)
       query.andWhere(
         '(task.title LIKE :search OR task.description LIKE :search)',
         { search: `%${search}%` },
@@ -28,7 +27,7 @@ export class TaskRepositoty extends Repository<Task> {
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const { title, description } = createTaskDto;
-    const task = new Task(); // Creating new task Entity object
+    const task = new Task();
     task.title = title;
     task.description = description;
     task.status = TaskStatus.OPEN;
