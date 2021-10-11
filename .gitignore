@@ -1,3 +1,7 @@
+# REST client
+zrest.http
+
+
 # compiled output
 /dist
 /node_modules
